@@ -24,7 +24,7 @@ class RecorderStreamPlugin {
           throw MissingPluginException();
       }
     });
-    return controller.stream;
+    return controller.stream.asBroadcastStream();
   }
 
   static Future<void> startRecorder() async {
