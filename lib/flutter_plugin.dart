@@ -12,6 +12,7 @@ class RecorderStreamPlugin {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
+  static Stream<Uint8List> _stream = controller.stream.asBroadcastStream();
   static Stream<Uint8List> getAudioEvent() {
     _channel.setMethodCallHandler((call) {
       switch (call.method){
@@ -24,7 +25,7 @@ class RecorderStreamPlugin {
           throw MissingPluginException();
       }
     });
-    return controller.stream.asBroadcastStream();
+    return _stream;
   }
 
   static Future<void> startRecorder() async {
