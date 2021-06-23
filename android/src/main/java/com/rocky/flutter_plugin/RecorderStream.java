@@ -1,5 +1,8 @@
 package com.rocky.flutter_plugin;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -16,6 +19,7 @@ public class RecorderStream implements FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   MethodChannel channel;
   VoiceRecorder mVoiceRecorder;
+  private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
   VoiceRecorder.Callback mVoiceCallback = new VoiceRecorder.Callback() {
 
     @Override
@@ -25,7 +29,10 @@ public class RecorderStream implements FlutterPlugin, MethodCallHandler {
 
     @Override
     public void onVoice(byte[] data, int size) {
-      channel.invokeMethod("addEvent",data);
+      uiThreadHandler.post(()->
+        channel.invokeMethod("addEvent",data)
+      );
+
     }
 
     @Override
