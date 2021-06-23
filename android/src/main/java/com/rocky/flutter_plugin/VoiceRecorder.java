@@ -23,14 +23,6 @@ import android.media.MediaRecorder;
 import android.os.Build;
 
 
-/**
- * Continuously records audio and notifies the {@link Callback} when voice (or any
- * sound) is heard.
- *
- * <p>The recorded audio format is always {@link AudioFormat#ENCODING_PCM_16BIT} and
- * {@link AudioFormat#CHANNEL_IN_MONO}. This class will automatically pick the right sample rate
- * for the device. Use {@link #getSampleRate()} to get the selected value.</p>
- */
 public class VoiceRecorder {
 
     private static final int[] SAMPLE_RATE_CANDIDATES = new int[]{16000, 11025, 22050, 44100};
@@ -44,24 +36,13 @@ public class VoiceRecorder {
 
     public static abstract class Callback {
 
-        /**
-         * Called when the recorder starts hearing voice.
-         */
+
         public void onVoiceStart() {
         }
 
-        /**
-         * Called when the recorder is hearing voice.
-         *
-         * @param data The audio data in {@link AudioFormat#ENCODING_PCM_16BIT}.
-         * @param size The size of the actual data in {@code data}.
-         */
         public void onVoice(byte[] data, int size) {
         }
 
-        /**
-         * Called when the recorder stops hearing voice.
-         */
         public void onVoiceEnd() {
         }
     }
@@ -76,21 +57,15 @@ public class VoiceRecorder {
 
     private final Object mLock = new Object();
 
-    /** The timestamp of the last time that voice is heard. */
     private long mLastVoiceHeardMillis = Long.MAX_VALUE;
 
-    /** The timestamp when the current voice is started. */
     private long mVoiceStartedMillis;
 
     public VoiceRecorder(Callback callback) {
         mCallback = callback;
     }
 
-    /**
-     * Starts recording audio.
-     *
-     * <p>The caller is responsible for calling {@link #stop()} later.</p>
-     */
+
     public void start() {
         // Stop recording if it is currently ongoing.
         stop();
@@ -108,9 +83,7 @@ public class VoiceRecorder {
         mThread.start();
     }
 
-    /**
-     * Stops recording audio.
-     */
+
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void stop() {
         synchronized (mLock) {
@@ -128,9 +101,7 @@ public class VoiceRecorder {
         }
     }
 
-    /**
-     * Dismisses the currently ongoing utterance.
-     */
+
     public void dismiss() {
         if (mLastVoiceHeardMillis != Long.MAX_VALUE) {
             mLastVoiceHeardMillis = Long.MAX_VALUE;
@@ -138,11 +109,7 @@ public class VoiceRecorder {
         }
     }
 
-    /**
-     * Retrieves the sample rate currently used to record audio.
-     *
-     * @return The sample rate of recorded audio.
-     */
+
     public int getSampleRate() {
         if (mAudioRecord != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
@@ -152,12 +119,7 @@ public class VoiceRecorder {
         return 0;
     }
 
-    /**
-     * Creates a new {@link AudioRecord}.
-     *
-     * @return A newly created {@link AudioRecord}, or null if it cannot be created (missing
-     * permissions?).
-     */
+
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private AudioRecord createAudioRecord() {
         for (int sampleRate : SAMPLE_RATE_CANDIDATES) {
@@ -180,10 +142,7 @@ public class VoiceRecorder {
         return null;
     }
 
-    /**
-     * Continuously processes the captured audio and notifies {@link #mCallback} of corresponding
-     * events.
-     */
+
     private class ProcessVoice implements Runnable {
 
         @TargetApi(Build.VERSION_CODES.CUPCAKE)
