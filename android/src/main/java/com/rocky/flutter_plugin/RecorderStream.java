@@ -28,7 +28,7 @@ public class RecorderStream implements FlutterPlugin, MethodCallHandler {
     }
 
     @Override
-    public void onVoice(byte[] data, int size) {
+    public void onVoice(final byte[] data, int size) {
       uiThreadHandler.post(new Runnable() {
                              @Override
                              public void run() {
