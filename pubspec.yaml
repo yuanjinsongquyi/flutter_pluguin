@@ -28,7 +28,7 @@ flutter:
     platforms:
       android:
         package: com.rocky.flutter_plugin
-        pluginClass: FlutterPlugin
+        pluginClass: RecorderStream
       ios:
         pluginClass: FlutterPlugin
 
