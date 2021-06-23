@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 
-class FlutterPlugin {
+class RecorderStreamPlugin {
   static const MethodChannel _channel =
       const MethodChannel('flutter_plugin');
   static StreamController<Uint8List> controller = StreamController<Uint8List>();

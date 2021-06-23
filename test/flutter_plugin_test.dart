@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await FlutterPlugin.platformVersion, '42');
+    expect(await RecorderStreamPlugin.platformVersion, '42');
   });
 }
