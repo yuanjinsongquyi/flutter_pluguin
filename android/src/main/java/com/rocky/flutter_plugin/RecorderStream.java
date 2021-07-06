@@ -1,5 +1,7 @@
 package com.rocky.flutter_plugin;
 
+import java.util.Arrays;
+
 import android.os.Handler;
 import android.os.Looper;
 
@@ -28,11 +30,11 @@ public class RecorderStream implements FlutterPlugin, MethodCallHandler {
     }
 
     @Override
-    public void onVoice(final byte[] data, int size) {
+    public void onVoice(final byte[] data, final int size) {
       uiThreadHandler.post(new Runnable() {
                              @Override
                              public void run() {
-                               channel.invokeMethod("addEvent", data);
+                               channel.invokeMethod("addEvent", Arrays.copyOfRange(data, 0, size));
                              }
                            }
                            );
